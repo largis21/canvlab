@@ -1,32 +1,44 @@
-import Link from "next/link"
+import Link from "next/link";
+import { useRouter } from "next/router";
+
+const navRoutes = ["editor", "docs", "resources", "preferences"]
 
 export default function Navbar( page ) {
+  const router = useRouter()
   return (
     <div className="navbar">
-      <h1>FULAB 3.0</h1>
+      <Link href="/">
+        <a id="navbar-title">
+          Lars er kul sant maxim
+        </a>
+      </Link>
       <ul>
-        <li className="active">
-          <Link href="#">
-            <a>
-              Editor
-            </a>
-          </Link>
-        </li>
-        <li>
-          <Link href="#">
-            <a>
-              Docs
-            </a>
-          </Link>
-        </li>
-        <li>
-          <Link href="#">
-            <a>
-              Ressurser
-            </a>
-          </Link>
-        </li>
+        {navRoutes.map((currRoute) => 
+          <NavigationLink 
+            key={currRoute}
+            href={`/${currRoute}`}
+            text={currRoute}
+            router={router}
+          />
+        )}
       </ul>
     </div>
+  )
+}
+
+function NavigationLink({ href, text, router}) {
+  const isActive = router.asPath === (href === "/home" ? "/" : href);
+
+  return (
+    <li 
+      key={text}
+      className={`${isActive && "nav_item_active"} nav_item`}
+    >
+      <Link href={`/${text}`}>
+        <a>
+          {text[0].toUpperCase() + text.slice(1, text.length)}
+        </a>
+      </Link>
+    </li>
   )
 }

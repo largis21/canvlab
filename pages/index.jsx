@@ -1,4 +1,3 @@
-
 // React Components
 import Navbar from "../components/Navbar"
 import FileMenu from "../components/FileMenu"
@@ -6,9 +5,8 @@ import FileMenu from "../components/FileMenu"
 export default function Home() {
   return (
     <div className="root">
-      <Navbar />
       <div className="main-content">
-        <FileMenu />
+        <h1 style={{color: "white"}}>Code editor landing page</h1>
       </div>
     </div>
   )

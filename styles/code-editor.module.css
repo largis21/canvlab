@@ -1,0 +1,81 @@
+.editor-root {
+  background-color: var(--gray-800);
+  height: 100%;
+  width: 500px;
+  position: relative;
+  border-right: 1px solid var(--border-color);
+
+  display: flex;
+  flex-flow: column;
+}
+
+.editor-head {
+  width: 100%;
+  height: 2rem;
+  background-color: var(--gray-700);
+  opacity: 1;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.file-title {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  background-color: var(--gray-650);
+  padding: 0 1rem 0 1rem ;
+  border-right: 1px solid var(--border-color);
+}
+
+.editor-head h4{
+  color: var(--default-text-color);
+  font-weight: normal;
+  user-select: none;
+}
+
+.editor-head ul {
+  list-style-type: none;
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: right;
+}
+
+.editor-head li {
+  width: fit-content;
+  margin-right: .4rem;
+}
+
+.editor-head img {
+  transform: rotate(90deg);
+  height: 1.2rem;
+  user-select: none;
+}
+
+.editor-head img:hover {
+  cursor: pointer;
+}
+
+#editor-main {
+  border: none;
+  width: 100% !important; 
+  flex-grow: 100 !important;
+}
+
+.ace_scrollbar::-webkit-scrollbar {
+  height: 7px;
+  width: 7px;
+}
+
+.ace_scrollbar::-webkit-scrollbar-track
+{
+  box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  background-color: none;
+}
+
+.ace_scrollbar::-webkit-scrollbar-thumb {
+  background-color: var(--gray-600);
+}

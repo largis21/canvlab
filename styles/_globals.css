@@ -1,0 +1,36 @@
+:root {
+  --gray-100: rgb(200,200,200);
+  --gray-200: rgb(200,200,200);
+  --gray-300: rgb(200,200,200);
+  --gray-400: rgb(200,200,200);
+  --gray-500: rgb(90, 90, 90);
+  --gray-600: rgb(70, 70, 70);
+  --gray-650: rgb(60, 60, 60);
+  --gray-700: rgb(45, 45, 45);
+  --gray-750: rgb(35, 35, 35);
+  --gray-800: rgb(30, 30, 30);
+  --gray-900: rgb(20, 20, 20);
+
+  --default-text-color: white;
+
+  --navbar-height: 3rem;
+  --border-color: rgb(82, 82, 82);
+}
+
+@import './initate.module.css';
+
+@import './navbar.module.css';
+
+@import './file-menu.module.css';
+
+@import './dropdown.module.css';
+
+@import './resizer.module.css';
+
+@import './code-editor.module.css';
+
+@import './console.module.css';
+
+@import './preferences.module.css';
+
+@import './new-folder.module.css'

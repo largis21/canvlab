@@ -1,0 +1,16 @@
+.resizer {
+  position: absolute;
+  background-color: var(--gray-900);
+  width: 16px;
+  height: 100%;
+  right: -8px;
+  z-index: 99;
+  opacity: 0;
+
+  transition: opacity 200ms;
+}
+
+.resizer:hover {
+  opacity: 0.5;
+  cursor:ew-resize;
+}

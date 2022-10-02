@@ -1,46 +1,52 @@
-import interact from "interactjs";
-import { useEffect } from "react";
-
 import Dropdown from "./Dropdown";
+import Resizer from "./Resizer";
 
+import { useState } from "react";
+import NewFolderDialog from "./NewFolderDialog";
 
-
-export default function FileMenu() {
-
-  const options = {
-    title: "Hei",
-    items: 
-    [{
-      name: "index.js",
-      type: "document",
-      location: ""
-    },
-    {
-      name: "indexnr2.js",
-      type: "document",
-      location: ""
-    },
-    {
-      name: "indexnr3.js",
-      type: "document",
-      location: ""
-    },
-    {
-      name: "indexnr4.js",
-      type: "document",
-      location: ""
-    }
-  ]}
-
-  useEffect(() => {
-    interact('.resize-right').resizable({
-      edges: {right: true}
-    })
-  }, [])
-
+export default function FileMenu( props ) {
+  const userFiles = props.dataManager.userFiles
+  
   return (  
-    <div className="file-menu resize-right">
-      <Dropdown options={options}/>
+    <div className="file-menu">
+      <Resizer minWidth="145"/>
+      <div className="file-menu-top">
+        {
+          userFiles.map((folder, index) => {
+            return <Dropdown key={index} options={
+              {
+                title: folder["folderName"], 
+                items: folder["files"]
+              }
+              } />
+          })
+        }
+      </div>
+      <div className="file-menu-bottom">
+        <NewFolderButton />
+      </div>
     </div>
+  )
+}
+
+function NewFolderButton() {
+  const [dialogActive, setDialogActive] = useState(false)
+
+  function newFolderClicked() {
+    if (!dialogActive) {
+      setDialogActive(true)
+    }
+  }
+
+  return(
+    <>
+      <div className="new-folder" onClick={newFolderClicked}>
+        <img src="icon-plus.svg" alt="" />
+        <h4>New Folder</h4>
+      </div>
+      {dialogActive ? 
+        <NewFolderDialog />
+      : ""}
+    </>
   )
 }

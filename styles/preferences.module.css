@@ -1,0 +1,45 @@
+.preferences-root {
+  color: var(--default-text-color);
+  text-align: center;
+  margin-top: 1rem;
+
+  display: flex;
+  justify-content: center;
+}
+
+.preferences-root ul {
+  list-style-type: none;
+}
+
+.preferences-root h1 {
+  margin: 1rem 0 1rem 0;
+}
+
+.preferences-root h2 {
+  margin-bottom: 1rem;
+}
+
+.preferences-root li {
+  margin-bottom: 3rem ;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center
+}
+
+.preferences-item {
+  width: 40%;
+  margin-bottom: 1rem;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.preferences-item select{
+  border: none;
+  border-radius: 1em;
+  padding: .4em;
+}

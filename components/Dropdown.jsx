@@ -1,7 +1,3 @@
-import { useState, useEffect } from "react"
-
-
-
 /* DROPDOWN dropdownOptions EXAMPLE
 const dropdownOptions = {
   title: "Hei",
@@ -28,15 +24,21 @@ const dropdownOptions = {
   }
 ]}
 */
+import { useState, useEffect } from "react"
+import { setCurrentFile } from "../pages/editor/EditorPage"
+
 export default function Dropdown( props ) {
   const [isActive, setIsActive] = useState(true)
 
   const dropdownOptions = props.options
 
   function dropdownHeadClicked(event) {
-    console.log("hei")
     if (isActive) setIsActive(false)
     if (!isActive) setIsActive(true)
+  }
+
+  function fileClicked(folderName, fileName) {
+    setCurrentFile(folderName, fileName)
   }
 
   return (
@@ -49,11 +51,14 @@ export default function Dropdown( props ) {
       </div>
       <ul className={isActive ? "dropdown-list-active dropdown-list" : "dropdown-list "}>  
         {
-          dropdownOptions.items.map((item) => 
-          <li className="dropdown-item">
-            {item.type == "document" ? <img src="/icon-document.svg" /> : ""}
-            <h4>{item.name}</h4>
-          </li>  
+          dropdownOptions.items.map((item, index) => 
+            <li key={index} id={`${dropdownOptions.title} ${item.name}`} className="dropdown-item" onClick={() => {
+              fileClicked(dropdownOptions.title, item.name)
+            }}>
+              <img src={`/icon-${item.fileLanguage}.svg`}/>
+
+              <h4>{item.name}</h4>
+            </li>
           )
         }
       </ul>

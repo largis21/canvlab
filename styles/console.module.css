@@ -1,0 +1,5 @@
+.console-root {
+  background-color: var(--gray-700);
+  height: 100%;
+  flex-grow: 100;
+}

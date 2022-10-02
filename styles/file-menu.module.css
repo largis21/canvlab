@@ -1,0 +1,46 @@
+.file-menu{
+  height: 100%;
+  background-color: var(--gray-800);
+  border-right: 1px solid var(--border-color);
+  position: relative;
+  width: 250px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.file-menu-top {
+  overflow-y: auto;
+  flex-grow: 100;
+}
+
+.new-folder {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-top: 1px solid var(--border-color);
+  height: 2.3rem;
+  background-color: var(--gray-600);
+  color: var(--default-text-color);
+  user-select: none;
+  
+  transition: background-color 200ms;
+}
+
+.new-folder img {
+  height: 30%;
+}
+
+.new-folder h4 {
+  font-weight: 400;
+}
+
+.new-folder>* {
+  padding-left: .4rem;
+}
+
+.new-folder:hover {
+  cursor: pointer;
+  background-color: var(--gray-500);
+}
