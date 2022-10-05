@@ -1,6 +1,8 @@
 import Resizer from "./Resizer"
 import { runCode, editorChange } from "../lib/main"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useContext } from "react"
+import { DataManagerCtxt } from "../lib/contexts/dataManagerContext"
+import { clone } from "../lib/clone"
 
 import AceEditor from "react-ace"
 
@@ -13,40 +15,49 @@ import 'ace-builds/src-noconflict/ext-beautify'
 import { edit } from "ace-builds"
 
 export default function CodeEditor( props ) {
-  const dataManager = props.dataManager
+  const { dataManager, setDataManager } = useContext(DataManagerCtxt)
 
   const [editorTheme, setEditorTheme] = useState(dataManager.preferences.editorTheme)
-  
   const [editorLanguage, setEditorLanguage] = useState(dataManager.preferences.editorLanguage)
   const [editorCode, setEditorCode] = useState(null)
   const [fileName, setFileName] = useState(null)
 
+  const [fileIsSaved, setFileIsSaved] = useState(true)
+
   useEffect(() => {
     setEditorTheme(dataManager.preferences.editorTheme)
-
-    const currentFolderName = dataManager.currentFile.folderName
-    const currentFileName = dataManager.currentFile.fileName
+    setFileIsSaved(true)
 
     dataManager.userFiles.forEach((folder) => {
-      if (folder.folderName == currentFolderName) {
-        folder.files.forEach((file) => {
-          if (file.name == currentFileName) {
-            setEditorCode(file.content)
-            setEditorLanguage(file.fileLanguage)
-            setFileName(file.name)
-          }
-        })
-      }
+      folder.files.forEach((file) => {
+        if (file.isCurrentFile) {
+          setEditorCode(file.content)
+          setEditorLanguage(file.fileLanguage)
+          setFileName(file.name)
+        }
+      })
     })
   }, [dataManager])
   
   function runCodeClicked(editorCode, editorLanguage) {
     runCode(editorCode, editorLanguage)
+
+    const dataManagerTemp = dataManager
+    dataManagerTemp.userFiles.forEach((folder) => {
+      folder.files.forEach((file) => {
+        if (file.isCurrentFile) {
+          file.content = editorCode
+        }
+      })
+    })
+    dataManagerTemp.fileIsSaved = true
+    setDataManager(dataManagerTemp)
+    setFileIsSaved(true)
   }
 
-  function onEditorChange(currectCode) {
-    editorChange(currectCode)
-    setEditorCode(currectCode)
+  function onEditorChange(currentCode) {
+    setEditorCode(currentCode)
+    setFileIsSaved(false)
   }
   
   return (
@@ -54,7 +65,7 @@ export default function CodeEditor( props ) {
       <Resizer minWidth="200"/>
       <div className="editor-head">
         <div className="file-title">
-          <h4>{fileName}</h4>
+          <h4>{fileName}{fileIsSaved ? "" : "*"}</h4>
         </div>
         <ul>
           <li>
@@ -66,7 +77,7 @@ export default function CodeEditor( props ) {
       <AceEditor
         mode={editorLanguage} 
         theme={editorTheme}
-        onChange={currectCode => onEditorChange(currectCode)}
+        onChange={currentCode => onEditorChange(currentCode)}
         name="editor-main"
         value={editorCode}
         setOptions={{ 

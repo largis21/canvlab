@@ -1,25 +1,26 @@
 import Dropdown from "./Dropdown";
 import Resizer from "./Resizer";
 
-import { useState } from "react";
-import NewFolderDialog from "./NewFolderDialog";
+import { useContext, useEffect, useState } from "react";
+import { DataManagerCtxt } from "../lib/contexts/dataManagerContext";
+import { DialogCtxt } from "../lib/contexts/dialogContext";
 
-export default function FileMenu( props ) {
-  const userFiles = props.dataManager.userFiles
+export default function FileMenu() {
+  const { dataManager, setDataManager } = useContext(DataManagerCtxt)
+
+  var userFiles = dataManager.userFiles
   
-  return (  
+  return (
     <div className="file-menu">
       <Resizer minWidth="145"/>
       <div className="file-menu-top">
         {
-          userFiles.map((folder, index) => {
-            return <Dropdown key={index} options={
-              {
-                title: folder["folderName"], 
-                items: folder["files"]
-              }
-              } />
-          })
+          userFiles.map((folder, index) => 
+            <Dropdown key={index} options=
+            {{
+              title: folder["folderName"], 
+              items: folder["files"]
+            }}/>)
         }
       </div>
       <div className="file-menu-bottom">
@@ -30,23 +31,18 @@ export default function FileMenu( props ) {
 }
 
 function NewFolderButton() {
-  const [dialogActive, setDialogActive] = useState(false)
+  const { dialogState, setDialogState } = useContext(DialogCtxt)
 
-  function newFolderClicked() {
-    if (!dialogActive) {
-      setDialogActive(true)
-    }
+  function newFolderDialog() {
+    setDialogState({
+      dialogType: 1
+    })
   }
 
   return(
-    <>
-      <div className="new-folder" onClick={newFolderClicked}>
-        <img src="icon-plus.svg" alt="" />
-        <h4>New Folder</h4>
-      </div>
-      {dialogActive ? 
-        <NewFolderDialog />
-      : ""}
-    </>
+    <div className="new-folder" onClick={() => newFolderDialog()}>
+      <img src="icon-plus.svg" alt="" />
+      <h4>New Folder</h4>
+    </div>
   )
 }

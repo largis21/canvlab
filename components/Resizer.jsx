@@ -14,9 +14,7 @@ export default function Resizer( props ) {
     )
     try{
       prevSibling = event.target.parentNode.previousElementSibling.getBoundingClientRect()
-    } catch {
-      console.log("no prev sibling")
-    }
+    } catch {}
   }
 
   function handleMouseUp(event) {

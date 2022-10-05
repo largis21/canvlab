@@ -24,11 +24,24 @@ const dropdownOptions = {
   }
 ]}
 */
-import { useState, useEffect } from "react"
-import { setCurrentFile } from "../pages/editor/EditorPage"
+import { useState, useEffect, useContext, useRef } from "react"
+import { DataManagerCtxt } from "../lib/contexts/dataManagerContext"
+import { clone } from "../lib/clone"
 
 export default function Dropdown( props ) {
+  const { dataManager, setDataManager } = useContext(DataManagerCtxt)
+  
   const [isActive, setIsActive] = useState(true)
+
+  const [activeFile, setActiveFile] = useState("")
+
+  useEffect(() => {
+    dataManager.userFiles.forEach((folder) => {
+      folder.files.forEach((file) => {
+        if (file.isCurrentFile) setActiveFile(file.name)
+      })
+    })
+  },[dataManager])
 
   const dropdownOptions = props.options
 
@@ -37,23 +50,43 @@ export default function Dropdown( props ) {
     if (!isActive) setIsActive(true)
   }
 
-  function fileClicked(folderName, fileName) {
-    setCurrentFile(folderName, fileName)
+  function fileClicked(fileName) {
+    const dataManagerTemp = clone(dataManager)
+
+    dataManagerTemp.userFiles.forEach((folder) => {
+      folder.files.forEach((file) => {
+        if (file.isCurrentFile) file.isCurrentFile = false
+      })
+    })
+
+    dataManagerTemp.userFiles.forEach((folder) => {
+      folder.files.forEach((file) => {
+        if (file.name == fileName) file.isCurrentFile = true
+      })
+    })
+
+    setDataManager(dataManagerTemp)
   }
 
   return (
     <div className="dropdown">
       <div onClick={dropdownHeadClicked} className={isActive ? "dropdown-head dropdown-active" : "dropdown-head"}>
         <span>
-          <img className={isActive ? "dropdown-icon dropdown-active-icon " : "dropdown-icon "} src="/icon-dropdown.svg" />
+          <img 
+            className={isActive ? "dropdown-icon dropdown-active-icon " : "dropdown-icon "} 
+            src="/icon-dropdown.svg" 
+          />
         </span>
         <h4>{dropdownOptions.title}</h4>
       </div>
       <ul className={isActive ? "dropdown-list-active dropdown-list" : "dropdown-list "}>  
         {
           dropdownOptions.items.map((item, index) => 
-            <li key={index} id={`${dropdownOptions.title} ${item.name}`} className="dropdown-item" onClick={() => {
-              fileClicked(dropdownOptions.title, item.name)
+            <li 
+            key={index} 
+            className={item.name == activeFile ? "dropdown-item active-file" : "dropdown-item"}
+            onClick={() => {
+              fileClicked(item.name)
             }}>
               <img src={`/icon-${item.fileLanguage}.svg`}/>
 
