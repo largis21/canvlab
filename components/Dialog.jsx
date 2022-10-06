@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react"
 import { DataManagerCtxt } from "../lib/contexts/dataManagerContext"
 import { DialogCtxt } from "../lib/contexts/dialogContext"
+import { clone } from "../lib/clone"
 
 export default function Dialog( props ) {
   const { dialogState, setDialogState } = useContext(DialogCtxt)
@@ -20,12 +21,6 @@ export default function Dialog( props ) {
     }
   }, [dialogState])
 
-  function closeDialog() {
-    setDialogState({
-      dialogType: 0
-    })
-  }
-
   function handleKeydown( event ) {
     //console.log(event.keyCode)
     if (event.keyCode == 27) {
@@ -33,19 +28,46 @@ export default function Dialog( props ) {
       closeDialog()
     } else if (event.keyCode == 13) {
       //ENTER
-      validateNewFolder(inputText)
+      var newFolderName 
+      console.log(document.querySelector("new_folder_input"))
+      const newFolderName = document.getElementById("new_folder_input").value
+        
+      validateNewFolder(newFolderName)
     }
   }
 
-  useEffect(() => {
-    console.log(inputText)
-  }, [inputText])
+  function closeDialog() {
+    setDialogState({dialogType: 0})
+    setErrorMsg("")
+    setInputText("")
+  }
 
   function validateNewFolder(newFolderName) {
+    var newFolderName;
+
+    if (!newFolderName) newFolderName = inputText
+
     var foundFileWithName = false 
     dataManager.userFiles.forEach((folder) => {
         if (folder.folderName == newFolderName) foundFileWithName = true
     })
+
+    if (!foundFileWithName) {
+      const dataManagerTemp = clone(dataManager)
+
+      dataManagerTemp.userFiles.push(
+        {
+          folderName: newFolderName,
+          files: []
+        }
+      )
+
+      setDataManager(dataManagerTemp)
+      closeDialog()
+      return
+    } else {
+      setErrorMsg("Already a folder with that name")
+    }
     console.log(foundFileWithName, newFolderName)
   }
 
@@ -54,7 +76,7 @@ export default function Dialog( props ) {
     <div className="dialog-top">
       <h3 className="dialog-title">Create New Folder</h3>
       <div className="dialog-body">
-        <input value={inputText} onChange={event => setInputText(event.target.value)} placeholder="Folder Name" type="text" id="new_folder_input"/>
+        <input value={inputText} onChange={event => { setInputText(event.target.value); setErrorMsg("") }} placeholder="Folder Name" type="text" id="new_folder_input"/>
         <p id="dialog-error-text">{errorMsg}</p>
       </div>
     </div>
@@ -62,7 +84,7 @@ export default function Dialog( props ) {
       <button onClick={closeDialog}>
         Close
       </button> 
-      <button className="dialog-button-highlight" onClick={validateNewFolder}>
+      <button id="new-folder-button" className="dialog-button-highlight" onClick={() => validateNewFolder()}>
         New Folder
       </button> 
     </div>

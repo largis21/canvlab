@@ -9,7 +9,7 @@ export default function Navbar( page ) {
     <div className="navbar">
       <Link href="/">
         <a id="navbar-title">
-          Lars er kul sant maxim
+          LarsLab 1.0
         </a>
       </Link>
       <ul>
