@@ -1,5 +1,30 @@
 .console-root {
-  background-color: var(--gray-700);
+  background-color: var(--gray-800);
   height: 100%;
   flex-grow: 100;
+  color: var(--default-text-color);
+  
+  display: flex;
+  flex-direction: column;
+}
+
+.console-head {
+  background-color: var(--gray-700);
+  border-bottom: 1px solid var(--border-color);
+  height: 2rem;
+
+  display: flex;
+  align-items: center;
+  padding-left: .5rem;
+}
+
+.console-main {
+  padding: .5rem;
+  overflow: hidden;
+  position: relative;
+  flex-grow: 100;
+}
+
+.console-main p{
+  position: absolute
 }

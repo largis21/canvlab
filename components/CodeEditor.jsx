@@ -1,24 +1,24 @@
 import Resizer from "./Resizer"
-import { runCode, editorChange } from "../lib/main"
 import { useState, useEffect, useContext } from "react"
 import { DataManagerCtxt } from "../lib/contexts/dataManagerContext"
+import { ConsoleCtxt } from "../lib/contexts/consoleCtxt"
 import { clone } from "../lib/clone"
 
 import AceEditor from "react-ace"
-
 import 'ace-builds/src-noconflict/mode-javascript'
 import 'ace-builds/src-noconflict/mode-python'
 import 'ace-builds/src-noconflict/theme-github'
 import 'ace-builds/src-noconflict/theme-monokai'
 import 'ace-builds/src-noconflict/ext-language_tools'
 import 'ace-builds/src-noconflict/ext-beautify'
-import { edit } from "ace-builds"
 
 export default function CodeEditor( props ) {
   const { dataManager, setDataManager } = useContext(DataManagerCtxt)
+  const { consoleText, setConsoleText } = useContext(ConsoleCtxt)
 
   const [editorTheme, setEditorTheme] = useState(dataManager ? dataManager.preferences.editorTheme : "monokai")
   const [editorLanguage, setEditorLanguage] = useState(dataManager ? dataManager.preferences.editorLanguage : "javascript")
+  const [editorFontSize, setEditorFontSize] = useState(dataManager ? dataManager.preferences.fontSize : "16px")
   const [editorCode, setEditorCode] = useState(null)
   const [fileName, setFileName] = useState(null)
 
@@ -41,9 +41,7 @@ export default function CodeEditor( props ) {
     }
   }, [dataManager])
   
-  function runCodeClicked(editorCode, editorLanguage) {
-    runCode(editorCode, editorLanguage)
-
+  function runCode(editorCode, editorLanguage) {
     const dataManagerTemp = dataManager
     dataManagerTemp.userFiles.forEach((folder) => {
       folder.files.forEach((file) => {
@@ -52,9 +50,23 @@ export default function CodeEditor( props ) {
         }
       })
     })
+
     dataManagerTemp.fileIsSaved = true
     setDataManager(dataManagerTemp)
     setFileIsSaved(true)
+
+    var evaluated; 
+    try {
+      evaluated = eval(editorCode)
+    } catch(err) {
+      evaluated = err
+    }
+
+    console.log(evaluated)
+
+    setConsoleText(
+      `Running ${fileName} ...${evaluated}`  
+    )
   }
 
   function onEditorChange(currentCode) {
@@ -71,7 +83,7 @@ export default function CodeEditor( props ) {
         </div>
         <ul>
           <li>
-              <img onClick={() => {runCodeClicked(editorCode, editorLanguage)}} src="/icon-run.svg"/>
+              <img onClick={() => {runCode(editorCode, editorLanguage)}} src="/icon-run.svg"/>
           </li>
         </ul>
       </div>
@@ -90,7 +102,7 @@ export default function CodeEditor( props ) {
           tabSize: 4,
           showPrintMargin: false,
           enableAutoIndent: true,
-
+          fontSize: editorFontSize
         }}
       />
     </div>

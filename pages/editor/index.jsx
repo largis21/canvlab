@@ -9,6 +9,8 @@ import { DataManagerCtxt } from "../../lib/contexts/dataManagerContext"
 import { DialogCtxt } from "../../lib/contexts/dialogContext"
 import Dialog from "../../components/Dialog"
 
+import { ConsoleCtxt } from "../../lib/contexts/consoleCtxt"
+
 export default function Home() {
   const [dataManager, setDataManager] = useState("")
   const dataManagerVal = { dataManager, setDataManager }
@@ -19,16 +21,20 @@ export default function Home() {
   const dialogStateVal = {  dialogState, setDialogState, 
                             fileToDelete, setFileToDelete, 
                             folderToDelete, setFolderToDelete 
-                          }
+  }
 
+  const [consoleText, setConsoleText] = useState("")
+  const consoleTextVal = { consoleText, setConsoleText }
+  
   return (
     <DataManagerCtxt.Provider value={dataManagerVal}>
       <DialogCtxt.Provider value={dialogStateVal}>
+        <ConsoleCtxt.Provider value={consoleTextVal}>
 
         <Dialog />
-
         <EditorPage />
 
+        </ConsoleCtxt.Provider>
       </DialogCtxt.Provider>
     </DataManagerCtxt.Provider>
   )
