@@ -4,48 +4,39 @@ import { DialogCtxt } from "../lib/contexts/dialogContext"
 import { clone } from "../lib/clone"
 
 export default function Dialog( props ) {
-  const { dialogState, setDialogState } = useContext(DialogCtxt)
   const { dataManager, setDataManager } = useContext(DataManagerCtxt)
+  const { dialogState, setDialogState, 
+          fileToDelete, setFileToDelete,
+          folderToDelete, setFolderToDelete } = useContext(DialogCtxt)
 
   const [errorMsg, setErrorMsg] = useState("")
   const [inputText, setInputText] = useState("")
 
   useEffect(() => {
-    if (dialogState.dialogType) {
-      document.addEventListener("keydown", handleKeydown)
-      document.getElementById("new_folder_input").focus()
-    } else {
+    if (dialogState == 0) {
       try {
-        document.removeEventListener("keydown", handleKeydown)
+        document.removeEventListener("keydown", keyDown)
       } catch {}
-    }
+    } else (
+      document.addEventListener("keydown", keyDown)
+    )
   }, [dialogState])
 
-  function handleKeydown( event ) {
-    //console.log(event.keyCode)
-    if (event.keyCode == 27) {
-      //ESCAPE
+  function keyDown(e) {
+    if (e.key == "Escape") {
       closeDialog()
-    } else if (event.keyCode == 13) {
-      //ENTER
-      var newFolderName 
-      console.log(document.querySelector("new_folder_input"))
-      const newFolderName = document.getElementById("new_folder_input").value
-        
-      validateNewFolder(newFolderName)
     }
   }
 
   function closeDialog() {
-    setDialogState({dialogType: 0})
+    setDialogState(0)
     setErrorMsg("")
     setInputText("")
+    setFileToDelete("")
+    setFolderToDelete("")
   }
 
   function validateNewFolder(newFolderName) {
-    var newFolderName;
-
-    if (!newFolderName) newFolderName = inputText
 
     var foundFileWithName = false 
     dataManager.userFiles.forEach((folder) => {
@@ -68,7 +59,34 @@ export default function Dialog( props ) {
     } else {
       setErrorMsg("Already a folder with that name")
     }
-    console.log(foundFileWithName, newFolderName)
+  }
+
+  function deleteFile(fileToDelete) {
+    const dataManagerTemp = clone(dataManager)
+
+    dataManagerTemp.userFiles.forEach((folder, folderIndex) => {
+      folder.files.forEach((file, fileIndex) => {
+        if (file.name == fileToDelete) {
+          dataManagerTemp.userFiles[folderIndex].files.splice(fileIndex, 1)
+        }
+      })
+    })
+
+    setDataManager(dataManagerTemp)
+    closeDialog()
+  }
+
+  function deleteFolder(folderToDelete) {
+    const dataManagerTemp = clone(dataManager)
+
+    dataManagerTemp.userFiles.forEach((folder, folderIndex) => {
+      if (folder.folderName == folderToDelete) {
+        dataManagerTemp.userFiles.splice(folderIndex, 1)
+      }
+    })
+
+    setDataManager(dataManagerTemp)
+    closeDialog()
   }
 
   const dialogType1 = 
@@ -76,7 +94,20 @@ export default function Dialog( props ) {
     <div className="dialog-top">
       <h3 className="dialog-title">Create New Folder</h3>
       <div className="dialog-body">
-        <input value={inputText} onChange={event => { setInputText(event.target.value); setErrorMsg("") }} placeholder="Folder Name" type="text" id="new_folder_input"/>
+        <input 
+          placeholder="Folder Name" 
+          type="text" 
+          id="new_folder_input"
+          autoFocus
+          value={inputText} 
+          onChange={event => { 
+            setInputText(event.target.value); setErrorMsg("") 
+          }} 
+          onKeyDown={event => {
+            if (event.key === "Enter") validateNewFolder(inputText)
+            if (event.key === "Escape") closeDialog()
+          }}
+        />
         <p id="dialog-error-text">{errorMsg}</p>
       </div>
     </div>
@@ -84,8 +115,64 @@ export default function Dialog( props ) {
       <button onClick={closeDialog}>
         Close
       </button> 
-      <button id="new-folder-button" className="dialog-button-highlight" onClick={() => validateNewFolder()}>
+      <button 
+        id="new-folder-button" 
+        className="dialog-button-highlight" 
+        onClick={() => validateNewFolder(inputText)}
+      >
         New Folder
+      </button> 
+    </div>
+  </div>
+
+  const dialogType2 = 
+  <div className="dialog-card">
+    <div className="dialog-top">
+      <h3 className="dialog-title">Do you want to delete this file?</h3>
+      <div className="dialog-body">
+        <p id="dialog-error-text">This action cannot be undone</p>
+      </div>
+    </div>
+    <div className="dialog-footer"> 
+      <button 
+        className="dialog-button-highlight" 
+        onClick={closeDialog}
+        autoFocus
+      >
+        Close
+      </button> 
+      <button 
+        id="new-folder-button" 
+        className="dialog-button-red" 
+        onClick={() => deleteFile(fileToDelete)}
+      >
+        Delete File
+      </button> 
+    </div>
+  </div>
+
+  const dialogType3 = 
+  <div className="dialog-card">
+    <div className="dialog-top">
+      <h3 className="dialog-title">Do you want to delete this folder?</h3>
+      <div className="dialog-body">
+        <p id="dialog-error-text">This action cannot be undone</p>
+      </div>
+    </div>
+    <div className="dialog-footer"> 
+      <button 
+        className="dialog-button-highlight" 
+        onClick={closeDialog}
+        autoFocus
+      >
+        Close
+      </button> 
+      <button 
+        id="new-folder-button" 
+        className="dialog-button-red" 
+        onClick={() => deleteFolder(folderToDelete)}
+      >
+        Delete Folder
       </button> 
     </div>
   </div>
@@ -93,11 +180,15 @@ export default function Dialog( props ) {
   return (
     <>
       {
-        dialogState.dialogType ?
+        dialogState ?
         <div className="dialog">
           {
-            dialogState.dialogType == 1 ? 
-            dialogType1
+            dialogState == 1 ? 
+              dialogType1
+            : dialogState == 2 ?
+              dialogType2
+            : dialogState == 3 ?
+              dialogType3
             :
             ""
           }

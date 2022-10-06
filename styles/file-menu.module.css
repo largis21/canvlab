@@ -36,6 +36,10 @@
   font-weight: 400;
 }
 
+.new-folder input {
+  font-weight: 400;
+}
+
 .new-folder>* {
   padding-left: .4rem;
 }
@@ -43,4 +47,15 @@
 .new-folder:hover {
   cursor: pointer;
   background-color: var(--gray-500);
+}
+
+#edit-filename-input {
+  background: var(--gray-800);
+  border: 1px solid var(--gray-500);
+  color: var(--default-text-color);
+}
+
+#edit-filename-input:focus {
+  border-radius: 0;
+  outline: none;
 }

@@ -17,26 +17,28 @@ import { edit } from "ace-builds"
 export default function CodeEditor( props ) {
   const { dataManager, setDataManager } = useContext(DataManagerCtxt)
 
-  const [editorTheme, setEditorTheme] = useState(dataManager.preferences.editorTheme)
-  const [editorLanguage, setEditorLanguage] = useState(dataManager.preferences.editorLanguage)
+  const [editorTheme, setEditorTheme] = useState(dataManager ? dataManager.preferences.editorTheme : "monokai")
+  const [editorLanguage, setEditorLanguage] = useState(dataManager ? dataManager.preferences.editorLanguage : "javascript")
   const [editorCode, setEditorCode] = useState(null)
   const [fileName, setFileName] = useState(null)
 
   const [fileIsSaved, setFileIsSaved] = useState(true)
 
   useEffect(() => {
-    setEditorTheme(dataManager.preferences.editorTheme)
-    setFileIsSaved(true)
+    if (dataManager) {
+      setEditorTheme(dataManager.preferences.editorTheme)
+      setFileIsSaved(true)
 
-    dataManager.userFiles.forEach((folder) => {
-      folder.files.forEach((file) => {
-        if (file.isCurrentFile) {
-          setEditorCode(file.content)
-          setEditorLanguage(file.fileLanguage)
-          setFileName(file.name)
-        }
+      dataManager.userFiles.forEach((folder) => {
+        folder.files.forEach((file) => {
+          if (file.isCurrentFile) {
+            setEditorCode(file.content)
+            setEditorLanguage(file.fileLanguage)
+            setFileName(file.name)
+          }
+        })
       })
-    })
+    }
   }, [dataManager])
   
   function runCodeClicked(editorCode, editorLanguage) {

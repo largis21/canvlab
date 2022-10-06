@@ -13,12 +13,18 @@ export default function Home() {
   const [dataManager, setDataManager] = useState("")
   const dataManagerVal = { dataManager, setDataManager }
 
-  const [dialogState, setDialogState] = useState({dialogIsActive: false, type: 1})
-  const dialogStateVal = { dialogState, setDialogState }
+  const [dialogState, setDialogState] = useState(0)
+  const [fileToDelete, setFileToDelete] = useState("")
+  const [folderToDelete, setFolderToDelete] = useState("")
+  const dialogStateVal = {  dialogState, setDialogState, 
+                            fileToDelete, setFileToDelete, 
+                            folderToDelete, setFolderToDelete 
+                          }
 
   return (
     <DataManagerCtxt.Provider value={dataManagerVal}>
       <DialogCtxt.Provider value={dialogStateVal}>
+
         <Dialog />
 
         <EditorPage />

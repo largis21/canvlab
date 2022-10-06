@@ -44,7 +44,7 @@
 }
 
 .dialog input[type=text]:focus {
-  border: none
+  outline: none
 }
 
 #dialog-error-text {
@@ -67,3 +67,7 @@
   background-color: rgb(230, 230, 230);
 }
 
+.dialog-footer .dialog-button-red {
+  background-color: rgb(241, 82, 82);
+  color: var(--default-text-color);
+}
