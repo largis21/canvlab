@@ -4,7 +4,7 @@ import { ConsoleCtxt } from "../lib/contexts/consoleCtxt"
 
 export default function CodeConsole() {
   const { dataManager, setDataManager } = useContext(DataManagerCtxt)
-
+  
   const { consoleText, setConsoleText } = useContext(ConsoleCtxt)
 
   return (

@@ -1,5 +1,4 @@
 import Dropdown from "./Dropdown";
-import Resizer from "./Resizer";
 
 import { createContext, useContext, useEffect, useState } from "react";
 import { DataManagerCtxt } from "../lib/contexts/dataManagerContext";
@@ -19,7 +18,6 @@ export default function FileMenu() {
   return (
     <EditFileNameCtxt.Provider value={editFileNameValue} >
       <div className="file-menu">
-        <Resizer minWidth="145"/>
         <div className="file-menu-top">
           {
             userFiles ? userFiles.map((folder, index) => 

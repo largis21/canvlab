@@ -42,4 +42,28 @@
   border: none;
   border-radius: 1em;
   padding: .4em;
+
+  transition: border-radius 200ms;
+}
+
+.preferences-item select:hover {
+  border-radius: .2em;
+}
+
+.preferences-item select:focus {
+  outline: none;
+  background-color: white;
+}
+
+.preferences-root button {
+  border: none;
+  border-radius: 1em;
+  padding: .6em;
+
+  transition: background-color 200ms;
+}
+
+.preferences-root button:hover {
+  cursor: pointer;
+  background-color: rgb(209, 209, 209);
 }

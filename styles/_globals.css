@@ -21,6 +21,8 @@
 
 @import './navbar.module.css';
 
+@import './editor-page.module.css';
+
 @import './file-menu.module.css';
 
 @import './dropdown.module.css';
@@ -30,6 +32,8 @@
 @import './code-editor.module.css';
 
 @import './console.module.css';
+
+@import './output.module.css';
 
 @import './preferences.module.css';
 

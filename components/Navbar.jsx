@@ -9,7 +9,7 @@ export default function Navbar( page ) {
     <div className="navbar">
       <Link href="/">
         <a id="navbar-title">
-          LarsLab 1.0
+          CanvLab
         </a>
       </Link>
       <ul>

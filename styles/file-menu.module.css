@@ -3,7 +3,6 @@
   background-color: var(--gray-800);
   border-right: 1px solid var(--border-color);
   position: relative;
-  width: 250px;
 
   display: flex;
   flex-direction: column;

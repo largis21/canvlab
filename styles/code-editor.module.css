@@ -1,7 +1,6 @@
 .editor-root {
   background-color: var(--gray-800);
   height: 100%;
-  width: 500px;
   position: relative;
   border-right: 1px solid var(--border-color);
 

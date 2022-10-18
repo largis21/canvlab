@@ -1,4 +1,7 @@
+import Resizer from "../../components/Resizer"
 import CodeConsole from "../../components/CodeConsole"
+import CodeOutput from "../../components/CodeOutput"
+
 import dynamic from "next/dynamic"
 import { useContext, useEffect, useState } from "react"
 
@@ -16,29 +19,20 @@ const FileMenu = dynamic(
 )
 
 export default function EditorPage( props ) {
-  const { dataManager, setDataManager } = useContext(DataManagerCtxt)
-
-  //Retrieve the datamanager from browser, will also generate a new one if none exists
-  useEffect(() => {
-    console.log("getting user data from browser")
-
-    function getUserData() {
-      if(!localStorage.getItem("dataManager")) localStorage.setItem("dataManager", JSON.stringify(defaultDataManager));
-      setDataManager(JSON.parse(localStorage.getItem("dataManager")))
-    }
-    getUserData()
-  }, [])
-
-  //Always keep localstorage updated
-  useEffect(() => {
-    if (dataManager) localStorage.setItem("dataManager", JSON.stringify(dataManager))
-  }, [dataManager])
-
   return (
     <div className="main-content">
-      <FileMenu />
-      <CodeEditor />
-      <CodeConsole />
+      <div className="editor-page-col">
+        <Resizer minWidth="185"/>
+        <FileMenu />
+      </div>
+      <div className="editor-page-col">
+        <Resizer minWidth="145"/>
+        <CodeEditor />
+      </div>
+      <div className="editor-page-col">
+        <CodeOutput />
+        <CodeConsole />
+      </div>
     </div>
   )
 }

@@ -1,0 +1,24 @@
+.main-content > * {
+  display: flex;
+  flex-direction: row;
+}
+
+.editor-page-col{
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.main-content .editor-page-col:last-child {
+  flex-grow: 1;
+}
+
+.main-content .editor-page-col:nth-child(1) {
+  width: 10%;
+  min-width: 185px;
+}
+
+.main-content .editor-page-col:nth-child(2) {
+  width: 50%;
+}
+

@@ -1,8 +1,10 @@
-import Resizer from "./Resizer"
 import { useState, useEffect, useContext } from "react"
+import { clone } from "../lib/clone"
+
 import { DataManagerCtxt } from "../lib/contexts/dataManagerContext"
 import { ConsoleCtxt } from "../lib/contexts/consoleCtxt"
-import { clone } from "../lib/clone"
+import { OutputCtxt } from "../lib/contexts/outputCtxt"
+
 
 import AceEditor from "react-ace"
 import 'ace-builds/src-noconflict/mode-javascript'
@@ -15,6 +17,7 @@ import 'ace-builds/src-noconflict/ext-beautify'
 export default function CodeEditor( props ) {
   const { dataManager, setDataManager } = useContext(DataManagerCtxt)
   const { consoleText, setConsoleText } = useContext(ConsoleCtxt)
+  const { codeOutput, setCodeOutput } = useContext(OutputCtxt)
 
   const [editorTheme, setEditorTheme] = useState(dataManager ? dataManager.preferences.editorTheme : "monokai")
   const [editorLanguage, setEditorLanguage] = useState(dataManager ? dataManager.preferences.editorLanguage : "javascript")
@@ -40,9 +43,9 @@ export default function CodeEditor( props ) {
       })
     }
   }, [dataManager])
-  
+
   function runCode(editorCode, editorLanguage) {
-    const dataManagerTemp = dataManager
+    const dataManagerTemp = clone(dataManager)
     dataManagerTemp.userFiles.forEach((folder) => {
       folder.files.forEach((file) => {
         if (file.isCurrentFile) {
@@ -55,18 +58,9 @@ export default function CodeEditor( props ) {
     setDataManager(dataManagerTemp)
     setFileIsSaved(true)
 
-    var evaluated; 
-    try {
-      evaluated = eval(editorCode)
-    } catch(err) {
-      evaluated = err
-    }
-
-    console.log(evaluated)
-
-    setConsoleText(
-      `Running ${fileName} ...${evaluated}`  
-    )
+    //spaghetti lol
+    const currCycle = codeOutput.cycle || 0
+    setCodeOutput({code: editorCode, cycle: currCycle+1})
   }
 
   function onEditorChange(currentCode) {
@@ -76,7 +70,6 @@ export default function CodeEditor( props ) {
   
   return (
     <div className="editor-root resize-right">
-      <Resizer minWidth="200"/>
       <div className="editor-head">
         <div className="file-title">
           <h4>{fileName}{fileIsSaved ? "" : "*"}</h4>

@@ -1,6 +1,6 @@
-.console-root {
+.output-root {
   background-color: var(--gray-800);
-  height: 100%;
+  height: 50%;
   flex-grow: 100;
   color: var(--default-text-color);
   
@@ -8,7 +8,7 @@
   flex-direction: column;
 }
 
-.console-head {
+.output-head {
   background-color: var(--gray-700);
   border-bottom: 1px solid var(--border-color);
   height: 2rem;
@@ -18,14 +18,13 @@
   padding-left: .5rem;
 }
 
-.console-main {
-  padding: .5rem;
-  overflow: hidden;
+.output-main {
   position: relative;
-  flex-grow: 100;
+  width: 100%;
+  flex-grow: 1;
 }
 
-.console-main p{
-  position: absolute;
-  white-space: pre-line
+.output-main canvas {
+
+  background-color: aliceblue;
 }
