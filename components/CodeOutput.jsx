@@ -18,12 +18,11 @@ export default function CodeOutput() {
     try {
       setConsoleText("Running code... ")
 
-      const codeSDK = new LarsLabSDK
+      const codeSDK = new LarsLabSDK(document.getElementById("canv-main"))
 
       let func = new Function(
         "codeSDK",
-        "const canvas = codeSDK.getCanv();" + 
-        "const ctx = canvas.getContext(\"2d\");" + 
+
         "codeSDK.clearCanvas();" +
         "codeSDK.fitCanvas();" +
         code
@@ -32,7 +31,7 @@ export default function CodeOutput() {
       func(codeSDK, code)
     
     } catch (e) {
-      console.log(e)
+      //console.log(e)
       setConsoleText(e.toString())
     }
   }

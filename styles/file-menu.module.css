@@ -35,10 +35,6 @@
   font-weight: 400;
 }
 
-.new-folder input {
-  font-weight: 400;
-}
-
 .new-folder>* {
   padding-left: .4rem;
 }
@@ -52,6 +48,7 @@
   background: var(--gray-800);
   border: 1px solid var(--gray-500);
   color: var(--default-text-color);
+  width: 80%;
 }
 
 #edit-filename-input:focus {

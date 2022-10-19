@@ -22,11 +22,11 @@ export default function EditorPage( props ) {
   return (
     <div className="main-content">
       <div className="editor-page-col">
-        <Resizer minWidth="185"/>
+        <Resizer resize="right" minWidth={185}/>
         <FileMenu />
       </div>
       <div className="editor-page-col">
-        <Resizer minWidth="145"/>
+        <Resizer resize="right" minWidth={145}/>
         <CodeEditor />
       </div>
       <div className="editor-page-col">

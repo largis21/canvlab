@@ -1,10 +1,6 @@
 export default function Resizer( props ) {
-  var minWidth = 0
-  var prevSibling = {x:0, width:0};
+  const minWidth = props.minWidth || 0
   var target;
-
-  if (props.minWidth) minWidth = props.minWidth
-  const minWidthInt = parseInt(minWidth)
 
   function handleMouseDown(event) {
     target = event.target
@@ -13,21 +9,18 @@ export default function Resizer( props ) {
       window.removeEventListener("mousemove", onMouseMove)
     })
     window.addEventListener("mouseup", handleMouseUp)
-    try{
-      prevSibling = event.target.parentNode.previousElementSibling.getBoundingClientRect()
-    } catch {}
   }
 
   function handleMouseUp(event) {
     window.removeEventListener("mousemove", onMouseMove)
-    prevSibling = {x:0, width:0};
   }
 
   function onMouseMove(event) {
-    const newWidth = event.clientX-(prevSibling.x+prevSibling.width)
+    const element = target.parentNode
+    const newWidth = event.pageX - element.getBoundingClientRect().left
 
-    if (newWidth < minWidthInt) {
-      target.parentNode.style.width = `${minWidthInt}px`
+    if (newWidth < minWidth) {
+      target.parentNode.style.width = `${minWidth}px`
     } else {
       target.parentNode.style.width = `${newWidth}px`
     }

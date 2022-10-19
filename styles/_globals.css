@@ -15,6 +15,7 @@
 
   --navbar-height: 3rem;
   --border-color: rgb(82, 82, 82);
+
 }
 
 @import './initate.module.css';

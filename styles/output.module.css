@@ -1,7 +1,6 @@
 .output-root {
   background-color: var(--gray-800);
   height: 50%;
-  flex-grow: 100;
   color: var(--default-text-color);
   
   display: flex;
@@ -20,11 +19,11 @@
 
 .output-main {
   position: relative;
-  width: 100%;
   flex-grow: 1;
+
+  overflow: hidden;
 }
 
 .output-main canvas {
-
   background-color: aliceblue;
 }
